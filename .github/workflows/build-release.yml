@@ -1,47 +1,44 @@
-name: Build Plugin Release
+name: Build Plugin ZIP
 
 on:
   release:
     types: [published]
-  push:
-    tags:
-      - '*' # Si attiva con qualsiasi push di un tag
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
+    
     steps:
-      - name: Checkout repository
+      - name: Checkout codice
         uses: actions/checkout@v4
 
-      - name: Set version variable
-        id: vars
-        run: echo "VERSION=${{ github.event.release.tag_name || github.ref_name }}" >> $GITHUB_ENV
-
-      - name: Create versioned plugin zip
+      - name: Crea ZIP del plugin
         run: |
-          # Crea un archivio zip pulito con il numero di versione nel nome.
-          # git archive esclude automaticamente la cartella .git e rispetta
-          # eventuali regole di export-ignore nel file .gitattributes.
-          # Il prefisso "wp-inactivity-logout-pro/" assicura che i file vengano estratti
-          # in una cartella dedicata, evitando di spargere file nella root di destinazione.
-          git archive --format=zip --output="wp-inactivity-logout-pro-${{ env.VERSION }}.zip" --prefix=wp-inactivity-logout-pro/ HEAD
+          PLUGIN_NAME="wp-inactivity-logout-pro"
+          VERSION="${{ github.event.release.tag_name }}"
+          ZIP_NAME="${PLUGIN_NAME}-${VERSION}.zip"
+          
+          mkdir -p "$PLUGIN_NAME"
+          
+          # Copia tutti i file del plugin nella cartella, escludendo elementi non necessari
+          rsync -av --exclude='.git' \
+                   --exclude='.github' \
+                   --exclude='.gitignore' \
+                   --exclude="$PLUGIN_NAME" \
+                   --exclude='*.zip' \
+                   ./ "$PLUGIN_NAME/"
+          
+          # Crea lo ZIP con il nome che include la versione
+          zip -r "$ZIP_NAME" "$PLUGIN_NAME"
+          
+          # Salva il nome del file ZIP nelle variabili di ambiente
+          echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: wp-inactivity-logout-pro-${{ env.VERSION }}-artifact
-          path: wp-inactivity-logout-pro-${{ env.VERSION }}.zip
-          retention-days: 30
-
-      - name: Attach ZIP to Release
+      - name: Carica ZIP nella Release
         uses: softprops/action-gh-release@v2
         with:
-          files: wp-inactivity-logout-pro-${{ env.VERSION }}.zip
-          tag_name: ${{ env.VERSION }}
-          generate_release_notes: false
+          files: ${{ env.ZIP_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
