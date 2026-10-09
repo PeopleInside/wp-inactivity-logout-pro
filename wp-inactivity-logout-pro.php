@@ -27,30 +27,13 @@ define( 'WPINACT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPINACT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'WPINACT_TEXTDOMAIN', 'wp-inactivity-logout-pro' );
 
-// --- INIZIALIZZAZIONE AGGIORNAMENTI AUTOMATICI DA GITHUB ---
-// Richiede la libreria: https://github.com/YahnisElsts/plugin-update-checker
-// Installala tramite Composer: composer require yahnis-elsts/plugin-update-checker
-// Oppure scarica il repository e posizionalo in: vendor/plugin-update-checker/
-if ( file_exists( WPINACT_PLUGIN_DIR . 'vendor/plugin-update-checker/plugin-update-checker.php' ) ) {
-	require_once WPINACT_PLUGIN_DIR . 'vendor/plugin-update-checker/plugin-update-checker.php';
-	
-	$update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
-		'https://github.com/PeopleInside/wp-inactivity-logout-pro',
-		__FILE__,
-		'wp-inactivity-logout-pro'
-	);
-	
-	// Imposta il branch principale da cui controllare gli aggiornamenti
-	$update_checker->setBranch('main');
-}
-// -------------------------------------------------------------
-
 // Inclusione sicura dei moduli
 $wpinact_includes = [
 	WPINACT_PLUGIN_DIR . 'includes/class-inactivity-core.php',
 	WPINACT_PLUGIN_DIR . 'includes/class-server-session-guard.php',
 	WPINACT_PLUGIN_DIR . 'includes/class-admin-settings.php',
 	WPINACT_PLUGIN_DIR . 'includes/class-ajax-handler.php',
+	WPINACT_PLUGIN_DIR . 'includes/class-updater.php', // <-- AGGIUNTO: Meccanismo di aggiornamento nativo
 ];
 
 foreach ( $wpinact_includes as $wpinact_inc ) {
@@ -79,11 +62,24 @@ function run_plugin() {
 		$ajax_handler = new AjaxHandler();
 		$ajax_handler->init();
 	}
+
+	/*
+	 * L'updater NON va limitato a wp-admin.
+	 * Gli aggiornamenti automatici girano dentro wp-cron.php (e WP-CLI): 
+	 * in entrambi i contesti is_admin() vale false. Se non viene istanziato 
+	 * qui, il transient degli aggiornamenti viene sovrascritto e l'auto-update 
+	 * fallisce silenziosamente.
+	 */
+	if ( is_admin() || wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+		if ( class_exists( __NAMESPACE__ . '\Updater' ) ) {
+			Updater::instance();
+		}
+	}
 }
 add_action( 'plugins_loaded', __NAMESPACE__ . '\run_plugin' );
 
 /**
- * Attivazione sicura: registra le opzioni predefinite senza output per evitare errori di attivazione.
+ * Attivazione sicura: registra le opzioni predefinite.
  */
 register_activation_hook( __FILE__, function() {
 	$default_options = [
@@ -125,5 +121,5 @@ register_activation_hook( __FILE__, function() {
  * Deattivazione pulita.
  */
 register_deactivation_hook( __FILE__, function() {
-	// Mantiene le impostazioni salvate per non causare perdita di configurazione
+	// Mantiene le impostazioni salvate
 } );
