@@ -10,44 +10,44 @@ License URI: https://github.com/PeopleInside/wp-inactivity-logout-pro/blob/main/
 Plugin URI: https://github.com/PeopleInside/wp-inactivity-logout-pro
 Author URI: https://github.com/PeopleInside
 
-Disconnessione automatica per inattività con protezione a scheda chiusa lato server, avviso popup con conto alla rovescia e supporto bilingue (IT/EN).
+Automatic inactivity logout with server-side closed-tab protection, customizable countdown warning popup, and full bilingual support (IT/EN).
 
 == Description ==
 
-WP Inactivity Logout Pro protegge le sessioni degli utenti di WordPress su qualsiasi ruolo (amministratori, editori, clienti ed abbonati).
+WP Inactivity Logout Pro protects WordPress user sessions across all roles (administrators, editors, customers, and subscribers).
 
-A differenza dei tradizionali plugin che funzionano solo via JavaScript mentre la scheda del browser è aperta, WP Inactivity Logout Pro introduce una **doppia barriera di sicurezza**:
+Unlike traditional plugins that only work via JavaScript while the browser tab is open, WP Inactivity Logout Pro introduces a **dual security barrier**:
 
-1. **Client-Side Engine**: Monitora costantemente l'attività utente (mouse, tastiera, touch, scroll) senza mostrare il popup se l'utente è attivo. Se l'utente è realmente inattivo, mostra un popup con conto alla rovescia sincronizzato tra tutte le schede aperte via BroadcastChannel e localStorage.
-2. **Server-Side Closed-Tab Guard**: Registra l'ultimo timestamp attivo. Se un utente chiude il browser o la scheda e ritorna dopo il tempo consentito (es. 30 minuti), la sessione viene distrutta immediatamente lato server su 'init' con l'API nativa `wp_logout()`, senza errori 500 o redirect loop.
+1. **Client-Side Engine**: Continuously monitors user activity (mouse, keyboard, touch, scroll) without displaying a popup while the user is active. If the user becomes truly inactive, it displays a countdown popup synchronized across all open tabs via BroadcastChannel and localStorage.
+2. **Server-Side Closed-Tab Guard**: Records the last active timestamp. If a user closes the browser or tab and returns after the allowed time (e.g., 30 minutes), the session is immediately destroyed server-side on `init` using the native `wp_logout()` API, avoiding 500 errors or redirect loops.
 
 == Key Features ==
 
-* **Rilevamento Continuo di Attività**: Nessun popup mostrato prematuramente finché l'utente interagisce con la pagina.
-* **Avviso & Conteggio Personalizzabili**: Imposta il logout (es. 30 min) e l'avviso con conto alla rovescia (es. dopo 15 min).
-* **Disattivazione con 0**: Imposta a 0 i minuti dell'avviso per disattivare completamente il popup ed eseguire il logout diretto.
-* **Controllo di Validità**: L'avviso non può avere un valore superiore o uguale al tempo totale di logout.
-* **Chiusura a Scheda Chiusa**: Protezione totale se l'utente chiude la finestra e lascia il PC incustodito.
-* **Navigazione a Schede Fluida**: Tab admin 100% funzionanti con JavaScript nativo integrato.
-* **Bilingue Automatico**: Se WordPress è in Inglese il plugin e i messaggi sono in Inglese; se in Italiano sono in Italiano.
-* **Pronto per PHP 8.5**: Compatibile al 100% con PHP 8.0, 8.1, 8.2, 8.3, 8.4 e 8.5.
-* **Zero Vulnerabilità**: Nonce crittografici, sanitizzazione rigorosa, check permessi `manage_options` e logout nativo sicuro con `wp_logout()`.
-* **Aggiornamenti Automatici**: Ricevi gli aggiornamenti direttamente dalla dashboard di WordPress quando viene pubblicata una nuova release su GitHub.
+* **Continuous Activity Detection**: No premature popups while the user is interacting with the page.
+* **Customizable Warning & Countdown**: Set the logout time (e.g., 30 min) and the countdown warning (e.g., after 15 min).
+* **Disable with 0**: Set warning minutes to 0 to completely disable the popup and perform a direct logout.
+* **Validity Check**: The warning value cannot be greater than or equal to the total logout time.
+* **Closed-Tab Protection**: Total security if the user closes the window and leaves the PC unattended.
+* **Fluid Tab Navigation**: 100% working admin tabs with integrated native JavaScript.
+* **Automatic Bilingual**: If WordPress is in English, the plugin and messages are in English; if in Italian, they are in Italian.
+* **PHP 8.5 Ready**: 100% compatible with PHP 8.0, 8.1, 8.2, 8.3, 8.4, and 8.5.
+* **Zero Vulnerabilities**: Cryptographic nonces, strict sanitization, `manage_options` permission checks, and secure native logout via `wp_logout()`.
+* **Automatic Updates**: Receive updates directly from your WordPress dashboard when a new release is published on GitHub.
 
 == Installation ==
 
-1. Scarica il file `wp-inactivity-logout-pro.zip` dalla sezione [Releases](https://github.com/PeopleInside/wp-inactivity-logout-pro/releases) su GitHub.
-2. Nel tuo pannello WordPress vai su **Plugin > Aggiungi nuovo > Carica plugin**.
-3. Seleziona lo zip e clicca su **Installa ora**, quindi **Attiva**.
-4. Vai su **Impostazioni > Inactivity Logout** per configurare timeout e messaggi.
+1. Download the `wp-inactivity-logout-pro.zip` file from the [Releases](https://github.com/PeopleInside/wp-inactivity-logout-pro/releases) section on GitHub.
+2. In your WordPress admin panel, go to **Plugins > Add New > Upload Plugin**.
+3. Select the zip file and click **Install Now**, then **Activate**.
+4. Go to **Settings > Inactivity Logout** to configure timeout and messages.
 
 == Changelog ==
 
 = 1.0.5 =
-* Migliorato il README con stile GitHub e link al repository.
-* Integrato il sistema di aggiornamento automatico tramite GitHub Releases.
-* Aggiunto workflow GitHub Actions per la generazione automatica del file ZIP versionato ad ogni nuovo tag.
-* Corretta la licenza in MIT License in tutte le intestazioni.
+* Improved README with GitHub style and repository links.
+* Integrated automatic update system via GitHub Releases.
+* Added GitHub Actions workflow for automatic versioned ZIP generation on every new tag.
+* Corrected license to MIT License in all headers.
 
 = 1.0.4 =
-* Initial public release con protezione lato server e client.
+* Initial public release with server-side and client-side protection.
