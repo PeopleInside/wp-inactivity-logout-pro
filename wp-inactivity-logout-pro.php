@@ -3,7 +3,7 @@
  * Plugin Name: WP Inactivity Logout Pro
  * Plugin URI: https://github.com/PeopleInside/wp-inactivity-logout-pro
  * Description: Automatic inactivity logout with closed-tab server-side protection, customizable countdown warning popup, and full bilingual support (IT/EN).
- * Version: 1.0.5
+ * Version: 1.0.6
  * Requires at least: 6.0
  * Requires PHP: 8.0
  * Author: PeopleInside
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Costanti principali del plugin
-define( 'WPINACT_VERSION', '1.0.5' );
+define( 'WPINACT_VERSION', '1.0.6' );
 define( 'WPINACT_PLUGIN_FILE', __FILE__ );
 define( 'WPINACT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPINACT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
