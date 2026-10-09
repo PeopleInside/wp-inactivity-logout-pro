@@ -4,7 +4,7 @@ Tags: logout, inactivity, security, session, closed tab, inactivity logout, auto
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: MIT License
 License URI: https://github.com/PeopleInside/wp-inactivity-logout-pro/blob/main/LICENSE
 Plugin URI: https://github.com/PeopleInside/wp-inactivity-logout-pro
@@ -42,6 +42,9 @@ Unlike traditional plugins that only work via JavaScript while the browser tab i
 4. Go to **Settings > Inactivity Logout** to configure timeout and messages.
 
 == Changelog ==
+
+= 1.0.6 =
+* Changing readme from Italian to English
 
 = 1.0.5 =
 * Improved README with GitHub style and repository links.
