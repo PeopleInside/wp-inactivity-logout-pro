@@ -6,7 +6,7 @@ Tested up to: 6.8
 Requires PHP: 8.0
 Stable tag: 1.0.3
 License: MIT License
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://github.com/PeopleInside/wp-inactivity-logout-pro?tab=MIT-1-ov-file
 
 Disconnessione automatica per inattività con protezione a scheda chiusa lato server, avviso popup con conto alla rovescia e supporto bilingue (IT/EN).
 
