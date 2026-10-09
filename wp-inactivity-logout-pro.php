@@ -7,9 +7,9 @@
  * Requires at least: 6.0
  * Requires PHP: 8.0
  * Author: PeopleInside
- * Author URI: https://peopleinside.it
- * License: GPL v2 or later
- * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Author URI: https://github.com/PeopleInside
+ * License: MIT License
+ * License URI: https://github.com/PeopleInside/wp-inactivity-logout-pro/blob/main/LICENSE
  * Text Domain: wp-inactivity-logout-pro
  * Domain Path: /languages
  */
@@ -102,4 +102,28 @@ register_activation_hook( __FILE__, function() {
 			'countdown_label'  => 'Disconnessione automatica tra:',
 			'btn_stay_login'   => 'Rimani connesso',
 			'btn_logout_now'   => 'Disconnettiti ora',
-			'loggedout_notice' => 'Sei stato disconnesso
+			'loggedout_notice' => 'Sei stato disconnesso per inattività prolungata.',
+			'closed_tab_notice'=> 'La tua sessione precedente è scaduta mentre la scheda era chiusa.',
+		],
+		'strings_en'               => [
+			'modal_title'      => 'Session Expiring Due to Inactivity',
+			'modal_message'    => 'We have not detected any activity recently. For your security, you will be logged out automatically.',
+			'countdown_label'  => 'Automatic logout in:',
+			'btn_stay_login'   => 'Stay Logged In',
+			'btn_logout_now'   => 'Log Out Now',
+			'loggedout_notice' => 'You have been logged out due to extended inactivity.',
+			'closed_tab_notice'=> 'Your previous session expired while your browser tab was closed.',
+		],
+	];
+
+	if ( ! get_option( 'wpinact_settings' ) ) {
+		update_option( 'wpinact_settings', $default_options );
+	}
+} );
+
+/**
+ * Deattivazione pulita.
+ */
+register_deactivation_hook( __FILE__, function() {
+	// Mantiene le impostazioni salvate per non causare perdita di configurazione
+} );
