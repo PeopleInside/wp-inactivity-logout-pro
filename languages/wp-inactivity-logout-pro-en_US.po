@@ -1,0 +1,25 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Inactivity Logout Pro 1.0.3\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: PeopleInside\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Inactivity Logout Pro"
+msgstr "Inactivity Logout Pro"
+
+msgid "Inactivity Logout"
+msgstr "Inactivity Logout"
+
+msgid "Impostazioni"
+msgstr "Settings"
+
+msgid "La sessione è scaduta per inattività prolungata."
+msgstr "The session expired due to prolonged inactivity."
+
+msgid "Avviso di Sicurezza"
+msgstr "Security Notice"
