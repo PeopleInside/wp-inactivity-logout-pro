@@ -2,7 +2,7 @@
 
 [![Latest Release](https://img.shields.io/github/v/release/PeopleInside/wp-inactivity-logout-pro?label=release&color=blue)](https://github.com/PeopleInside/wp-inactivity-logout-pro/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/PeopleInside/wp-inactivity-logout-pro/blob/main/LICENSE)
-[![WordPress Tested](https://img.shields.io/badge/WordPress-v6.8%20tested-success)](https://wordpress.org/)
+[![WordPress Tested](https://img.shields.io/badge/WordPress-v7.1.3%20tested-success)](https://wordpress.org/)
 [![PHP Version](https://img.shields.io/badge/PHP-8.0%2B-brightgreen)](https://www.php.net/)
 
 Automatic inactivity logout with server-side closed-tab protection, customizable countdown warning popup, and full bilingual support (IT/EN).

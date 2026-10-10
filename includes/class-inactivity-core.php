@@ -74,9 +74,9 @@ class Core {
         $timeout_minutes = max( 1, (int) ( $settings['timeout_minutes'] ?? 30 ) );
         $raw_warning     = isset( $settings['warning_minutes'] ) ? (int) $settings['warning_minutes'] : 15;
 
-        // Se warning_minutes è 0, l'avviso popup è DISATTIVATO.
-        // Se è > 0, deve essere strettamente inferiore al timeout totale di logout.
-        if ( $raw_warning <= 0 ) {
+        // Se warning_minutes è 0 o il timeout è di 1 minuto, l'avviso popup è DISATTIVATO.
+        // Se è > 0, deve consentire almeno 1 minuto di differenza rispetto al timeout totale.
+        if ( $raw_warning <= 0 || $timeout_minutes <= 1 ) {
             $warning_minutes = 0;
             $enable_modal    = false;
             $countdown_diff  = 0;

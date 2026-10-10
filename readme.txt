@@ -2,9 +2,9 @@
 Contributors: PeopleInside
 Tags: logout, inactivity, security, session, closed tab, inactivity logout, auto logout
 Requires at least: 6.0
-Tested up to: 6.8
+Tested up to: 7.1.3
 Requires PHP: 8.0
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: MIT License
 License URI: https://github.com/PeopleInside/wp-inactivity-logout-pro/blob/main/LICENSE
 Plugin URI: https://github.com/PeopleInside/wp-inactivity-logout-pro
@@ -42,6 +42,11 @@ Unlike traditional plugins that only work via JavaScript while the browser tab i
 4. Go to **Settings > Inactivity Logout** to configure timeout and messages.
 
 == Changelog ==
+
+= 1.0.7 =
+* Fix: Resolved settings validation bug where changing total timeout and warning popup was blocked by previous saved values instead of live UI inputs.
+* Fix: Dynamic real-time calculation ensuring warning popup is at least 1 minute less than total inactivity timeout (minimum 1 minute or 0 to disable).
+* Tested up to WordPress 7.1.3.
 
 = 1.0.6 =
 * Changing readme from Italian to English

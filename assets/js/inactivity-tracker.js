@@ -5,7 +5,7 @@
  * la prevenzione della comparsa del popup se l'utente è attivo, e il supporto a 0 per disattivare l'avviso.
  *
  * @package WPInactivityLogoutPro
- * @version 1.0.4
+ * @version 1.0.7
  * @author  PeopleInside
  */
 

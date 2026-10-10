@@ -83,21 +83,31 @@ class AdminSettings {
         $timeout = absint( $input['timeout_minutes'] ?? 30 );
         $clean['timeout_minutes'] = max( 1, min( 1440, $timeout ) );
 
-        // Avviso popup: con 0 è DISATTIVATO. Se > 0, deve essere strettamente inferiore al timeout totale.
+        // Avviso popup: con 0 è DISATTIVATO. Se > 0, deve essere inferiore al timeout totale di almeno 1 minuto.
         $raw_warning = isset( $input['warning_minutes'] ) ? absint( $input['warning_minutes'] ) : 15;
         if ( 0 === $raw_warning ) {
             $clean['warning_minutes'] = 0;
         } else {
-            if ( $raw_warning >= $clean['timeout_minutes'] ) {
+            if ( $clean['timeout_minutes'] <= 1 ) {
+                $clean['warning_minutes'] = 0;
+                add_settings_error(
+                    'wpinact_settings',
+                    'wpinact_warning_adjusted',
+                    __( "Con un tempo totale di logout di 1 minuto, l'avviso popup è stato impostato a 0 (disattivato).", 'wp-inactivity-logout-pro' ),
+                    'warning'
+                );
+            } elseif ( $raw_warning >= $clean['timeout_minutes'] ) {
                 $raw_warning = max( 1, $clean['timeout_minutes'] - 1 );
                 add_settings_error(
                     'wpinact_settings',
                     'wpinact_warning_adjusted',
-                    __( "L'avviso popup deve avere un valore inferiore al tempo totale di logout. È stato regolato automaticamente (oppure imposta 0 per disattivarlo del tutto).", 'wp-inactivity-logout-pro' ),
+                    __( "L'avviso popup deve avere un valore inferiore al tempo totale di logout di almeno 1 minuto. È stato regolato automaticamente (oppure imposta 0 per disattivarlo del tutto).", 'wp-inactivity-logout-pro' ),
                     'warning'
                 );
+                $clean['warning_minutes'] = $raw_warning;
+            } else {
+                $clean['warning_minutes'] = $raw_warning;
             }
-            $clean['warning_minutes'] = $raw_warning;
         }
 
         $clean['enable_closed_tab_guard'] = ! empty( $input['enable_closed_tab_guard'] );
@@ -220,9 +230,9 @@ class AdminSettings {
                                 </label>
                             </th>
                             <td>
-                                <input type="number" id="warning_minutes" name="wpinact_settings[warning_minutes]" value="<?php echo esc_attr( (string) $settings['warning_minutes'] ); ?>" min="0" max="<?php echo max( 1, (int) $settings['timeout_minutes'] - 1 ); ?>" step="1" class="small-text" />
+                                <input type="number" id="warning_minutes" name="wpinact_settings[warning_minutes]" value="<?php echo esc_attr( (string) $settings['warning_minutes'] ); ?>" min="0" max="<?php echo max( 0, (int) $settings['timeout_minutes'] - 1 ); ?>" step="1" class="small-text" />
                                 <span><?php echo $is_it ? 'minuti di inattività (Es. 15, oppure 0 per disattivare)' : 'minutes of inactivity (e.g. 15, or 0 to disable)'; ?></span>
-                                <p class="description">
+                                <p class="description" id="wpinact-warning-description">
                                     <?php
                                     if ( (int) $settings['warning_minutes'] === 0 ) {
                                         echo $is_it
@@ -470,19 +480,89 @@ class AdminSettings {
 
             var timeoutInput = document.getElementById('timeout_minutes');
             var warningInput = document.getElementById('warning_minutes');
+            var warningDesc  = document.getElementById('wpinact-warning-description');
+            var isIt         = <?php echo $is_it ? 'true' : 'false'; ?>;
+
             if (timeoutInput && warningInput) {
-                var msgWarning = <?php echo json_encode( $is_it ? "L'avviso popup deve essere inferiore al timeout totale di logout (oppure imposta 0 per disattivarlo)." : "Warning must be strictly less than total timeout (or set 0 to disable)." ); ?>;
+                var msgWarning = isIt
+                    ? "L'avviso popup deve essere inferiore al timeout totale di logout di almeno 1 minuto (oppure imposta 0 per disattivarlo)."
+                    : "Warning popup must be at least 1 minute less than total logout timeout (or set 0 to disable).";
+
+                var msgTimeoutMin = isIt
+                    ? "Il tempo totale di logout deve essere di almeno 1 minuto."
+                    : "Total logout timeout must be at least 1 minute.";
+
                 function validateLimits() {
-                    var t = parseInt(timeoutInput.value, 10) || 30;
-                    var w = parseInt(warningInput.value, 10);
-                    if (!isNaN(w) && w > 0 && w >= t) {
+                    var tVal = timeoutInput.value.trim();
+                    var t = parseInt(tVal, 10);
+                    if (isNaN(t) || t < 1) {
+                        t = 1;
+                    }
+
+                    // Calcolo dinamico del limite massimo consentito per l'avviso sulla base degli input attuali nella UI
+                    // Se t = 1, l'avviso non può avere anticipo: consentito solo 0 (disattivato)
+                    // Se t >= 2, l'avviso massimo consentito è t - 1 (per garantire almeno 1 minuto di conteggio popup)
+                    var maxWarning = Math.max(0, t - 1);
+                    warningInput.max = maxWarning;
+
+                    // Validazione per il campo timeout_minutes
+                    if (tVal !== '' && parseInt(tVal, 10) < 1) {
+                        timeoutInput.setCustomValidity(msgTimeoutMin);
+                    } else {
+                        timeoutInput.setCustomValidity('');
+                    }
+
+                    var wVal = warningInput.value.trim();
+                    var w = parseInt(wVal, 10);
+
+                    // Validazione per il campo warning_minutes basata sugli input correnti della UI
+                    if (wVal === '' || isNaN(w)) {
+                        warningInput.setCustomValidity('');
+                    } else if (w < 0) {
+                        warningInput.setCustomValidity(isIt ? "Il valore non può essere negativo." : "Value cannot be negative.");
+                    } else if (w === 0) {
+                        // 0 significa avviso popup disattivato: sempre consentito
+                        warningInput.setCustomValidity('');
+                    } else if (w > maxWarning) {
+                        // Se w >= t (es. avviso 15 con logout 2, o avviso 1 con logout 1)
                         warningInput.setCustomValidity(msgWarning);
                     } else {
                         warningInput.setCustomValidity('');
                     }
+
+                    // Aggiornamento dinamico in tempo reale della spiegazione contestuale
+                    if (warningDesc && !isNaN(w) && w >= 0) {
+                        if (w === 0) {
+                            warningDesc.innerHTML = isIt
+                                ? '<span style="color:#2271b1;font-weight:600;">Avviso popup disattivato (0):</span> L&apos;utente verra disconnesso direttamente dopo ' + t + ' minuti senza mostrare alcun popup di avviso.'
+                                : '<span style="color:#2271b1;font-weight:600;">Warning popup disabled (0):</span> User will be logged out directly after ' + t + ' minutes without any modal popup.';
+                        } else if (t <= 1 && w > 0) {
+                            warningDesc.innerHTML = isIt
+                                ? '<span style="color:#d63638;font-weight:600;">Attenzione:</span> Con un timeout totale di 1 minuto non è possibile mostrare l&apos;avviso popup prima del logout. Imposta 0 per disattivare l&apos;avviso.'
+                                : '<span style="color:#d63638;font-weight:600;">Warning:</span> With 1 minute total timeout, popup warning cannot be shown before logout. Set 0 to disable.';
+                        } else if (w > maxWarning) {
+                            warningDesc.innerHTML = isIt
+                                ? '<span style="color:#d63638;font-weight:600;">Attenzione:</span> L&apos;avviso popup (' + w + ' min) deve essere inferiore al timeout totale (' + t + ' min) di almeno 1 minuto. Massimo consentito: ' + maxWarning + ' min (oppure imposta 0 per disattivarlo).'
+                                : '<span style="color:#d63638;font-weight:600;">Warning:</span> Warning popup (' + w + ' min) must be at least 1 minute less than total timeout (' + t + ' min). Maximum allowed: ' + maxWarning + ' min (or set 0 to disable).';
+                        } else {
+                            var diff = Math.max(1, t - w);
+                            warningDesc.innerHTML = isIt
+                                ? 'Con ' + t + ' minuti di logout e avviso a ' + w + ' minuti, il popup mostrera un conteggio di ' + diff + ' minuti rimanenti prima del logout. <em>(Imposta 0 per disattivare l&apos;avviso popup)</em>.'
+                                : 'With ' + t + ' m logout and warning at ' + w + ' m, popup will countdown ' + diff + ' minutes remaining. <em>(Set 0 to disable the warning popup)</em>.';
+                        }
+                    }
                 }
+
                 timeoutInput.addEventListener('input', validateLimits);
+                timeoutInput.addEventListener('change', validateLimits);
+                timeoutInput.addEventListener('keyup', validateLimits);
+
                 warningInput.addEventListener('input', validateLimits);
+                warningInput.addEventListener('change', validateLimits);
+                warningInput.addEventListener('keyup', validateLimits);
+
+                // Allinea immediatamente i limiti e il testo all'apertura della pagina
+                validateLimits();
             }
         })();
         </script>
