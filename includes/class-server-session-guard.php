@@ -28,6 +28,10 @@ class ServerSessionGuard {
         // Registra il login iniziale
         add_action( 'wp_login', [ $this, 'on_user_login' ], 10, 2 );
 
+        // Compatibilità con User Switching: aggiorna il timestamp all'avvio e al ritorno dallo switch
+        add_action( 'switch_to_user', [ $this, 'on_user_switch' ], 10, 2 );
+        add_action( 'switch_back_user', [ $this, 'on_user_switch' ], 10, 2 );
+
         // Regola la scadenza massima dei cookie
         add_filter( 'auth_cookie_expiration', [ $this, 'filter_auth_cookie_expiration' ], 10, 3 );
     }
@@ -43,6 +47,25 @@ class ServerSessionGuard {
             if ( $uid > 0 ) {
                 update_user_meta( $uid, self::META_KEY_LAST_ACTIVITY, time() );
             }
+        }
+    }
+
+    /**
+     * Aggiorna il timestamp di attività durante il cambio utente (compatibilità con User Switching).
+     *
+     * @param int|string $new_user_id ID del nuovo utente a cui si passa o si ritorna.
+     * @param int|string $old_user_id ID dell'utente precedente da cui si proviene.
+     */
+    public function on_user_switch( $new_user_id = 0, $old_user_id = 0 ) {
+        $now     = time();
+        $new_uid = (int) $new_user_id;
+        $old_uid = (int) $old_user_id;
+
+        if ( $new_uid > 0 ) {
+            update_user_meta( $new_uid, self::META_KEY_LAST_ACTIVITY, $now );
+        }
+        if ( $old_uid > 0 ) {
+            update_user_meta( $old_uid, self::META_KEY_LAST_ACTIVITY, $now );
         }
     }
 
