@@ -2,9 +2,9 @@
 Contributors: PeopleInside
 Tags: logout, inactivity, security, session, closed tab, inactivity logout, auto logout
 Requires at least: 6.0
-Tested up to: 7.1.3
+Tested up to: 7.1.4
 Requires PHP: 8.0
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 License: MIT License
 License URI: https://github.com/PeopleInside/wp-inactivity-logout-pro/blob/main/LICENSE
 Plugin URI: https://github.com/PeopleInside/wp-inactivity-logout-pro
@@ -36,12 +36,23 @@ Unlike traditional plugins that only work via JavaScript while the browser tab i
 
 == Installation ==
 
-1. Download the `wp-inactivity-logout-pro.zip` file from the [Releases](https://github.com/PeopleInside/wp-inactivity-logout-pro/releases) section on GitHub.
+1. Download the `wp-inactivity-logout-pro.zip` file from the Releases section on GitHub.
 2. In your WordPress admin panel, go to **Plugins > Add New > Upload Plugin**.
 3. Select the zip file and click **Install Now**, then **Activate**.
 4. Go to **Settings > Inactivity Logout** to configure timeout and messages.
 
+== Disclaimer ==
+
+This software is provided "AS IS", without any warranty. While it has been tested and reasonable efforts are made to ensure security and reliability, no guarantees are provided. As an open project, anyone may contribute or report issues, but this does not imply endorsement or liability from the maintainers.
+
+You use this software entirely at your own risk. The authors and contributors are not liable for any damages, data loss, or unexpected behavior resulting from its use, modification, or distribution. Always review and test the code independently before deploying it in critical or production environments.
+
 == Changelog ==
+
+= 1.0.9 =
+* Fix: the GitHub package host allowlist now includes the release CDN host, which could silently block the download of the update package.
+* Change: GitHub release cache reduced from 12 to 2 hours, so new releases are detected sooner.
+* Tested up to WordPress 7.1.4.
 
 = 1.0.8 =
 * Fix: Added full compatibility with User Switching plugin (`switch_to_user` and `switch_back_user` hooks), preventing unintended logouts when switching between user accounts while preserving strict inactivity security.
@@ -52,7 +63,7 @@ Unlike traditional plugins that only work via JavaScript while the browser tab i
 * Tested up to WordPress 7.1.3.
 
 = 1.0.6 =
-* Changing readme from Italian to English
+* Changing readme from Italian to English.
 
 = 1.0.5 =
 * Improved README with GitHub style and repository links.
