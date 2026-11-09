@@ -1,14 +1,11 @@
 # WP Inactivity Logout Pro
 
-[![Latest Release](https://img.shields.io/github/v/release/PeopleInside/wp-inactivity-logout-pro?label=release&color=blue)](https://github.com/PeopleInside/wp-inactivity-logout-pro/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/PeopleInside/wp-inactivity-logout-pro/blob/main/LICENSE)
-[![WordPress Tested](https://img.shields.io/badge/WordPress-v7.1.3%20tested-success)](https://wordpress.org/)
-[![PHP Version](https://img.shields.io/badge/PHP-8.0%2B-brightgreen)](https://www.php.net/)
+[![WordPress](https://img.shields.io/badge/WordPress-Tested%20up%20to%207.1.4-21759b.svg)](https://wordpress.org/)
+[![PHP Version](https://img.shields.io/badge/PHP-8.0%2B-8892bf.svg)](http://php.net/)
+[![GitHub Stars](https://img.shields.io/github/stars/PeopleInside/wp-inactivity-logout-pro.svg?style=social&label=Star)](https://github.com/PeopleInside/wp-inactivity-logout-pro/stargazers)
 
 Automatic inactivity logout with server-side closed-tab protection, customizable countdown warning popup, and full bilingual support (IT/EN).
-
-🔗 **GitHub Repository:** [https://github.com/PeopleInside/wp-inactivity-logout-pro](https://github.com/PeopleInside/wp-inactivity-logout-pro)  
-👤 **Author:** [PeopleInside](https://github.com/PeopleInside)
 
 ## 🛡️ Description
 
@@ -34,7 +31,7 @@ Unlike traditional plugins that only work via JavaScript while the browser tab i
 
 ## 📦 Installation
 
-1. Download the latest `wp-inactivity-logout-pro.zip` file from the [Releases](https://github.com/PeopleInside/wp-inactivity-logout-pro/releases) section.
+1. Download the latest `wp-inactivity-logout-pro.zip` file from the Releases section.
 2. In your WordPress admin panel, go to **Plugins > Add New > Upload Plugin**.
 3. Select the zip file and click **Install Now**, then **Activate**.
 4. Go to **Settings > Inactivity Logout** to configure timeout and messages.
@@ -43,10 +40,12 @@ Unlike traditional plugins that only work via JavaScript while the browser tab i
 
 This plugin integrates with GitHub for automatic updates. When a new tag (release) is published in this repository, a GitHub Action automatically generates the versioned ZIP file. Users with the plugin installed will receive the update notification directly in their WordPress dashboard, leveraging the native WordPress cron system.
 
-## 📝 Changelog
+## ⚠️ Disclaimer
 
-See the [readme.txt](https://github.com/PeopleInside/wp-inactivity-logout-pro/blob/main/readme.txt) file or the [Releases](https://github.com/PeopleInside/wp-inactivity-logout-pro/releases) section for full change details.
+This software is provided **"AS IS"**, without any warranty. While it has been tested and reasonable efforts are made to ensure security and reliability, no guarantees are provided. As an open project, anyone may contribute or report issues, but this does not imply endorsement or liability from the maintainers.
+
+**You use this software entirely at your own risk.** The authors and contributors are not liable for any damages, data loss, or unexpected behavior resulting from its use, modification, or distribution. Always review and test the code independently before deploying it in critical or production environments.
 
 ## 📜 License
 
-This project is distributed under the MIT License. See the [LICENSE](https://github.com/PeopleInside/wp-inactivity-logout-pro/blob/main/LICENSE) file for details.
+This project is distributed under the MIT License. See the [LICENSE](LICENSE) file for details.
