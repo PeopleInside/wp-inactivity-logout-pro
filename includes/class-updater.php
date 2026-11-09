@@ -19,7 +19,11 @@ class Updater {
 	const GITHUB_API_URL = 'https://api.github.com/repos/' . self::GITHUB_REPO . '/releases/latest';
 	const PLUGIN_SLUG = 'wp-inactivity-logout-pro';
 	const CACHE_KEY = 'wpilp_github_latest_release';
-	const CACHE_TTL = 12 * HOUR_IN_SECONDS;
+	
+	/**
+	 * FIX: Ridotto da 12 ore a 2 ore per un rilevamento più reattivo delle nuove release.
+	 */
+	const CACHE_TTL = 2 * HOUR_IN_SECONDS;
 	const CACHE_FAIL_TTL = 15 * MINUTE_IN_SECONDS;
 
 	public static function instance(): Updater {
@@ -148,6 +152,11 @@ class Updater {
 		return new \WP_Error( 'wpilp_github_no_package', __( 'Nessun pacchetto scaricabile trovato per questa release.', 'wp-inactivity-logout-pro' ) );
 	}
 
+	/**
+	 * FIX: Aggiunto 'github-releases.githubusercontent.com' alla whitelist.
+	 * Questo dominio è usato da GitHub per servire gli asset delle release
+	 * e senza di esso il download viene bloccato silenziosamente.
+	 */
 	private function is_trusted_github_url( string $url ): bool {
 		$parts = wp_parse_url( $url );
 		if ( ! is_array( $parts ) || empty( $parts['scheme'] ) || empty( $parts['host'] ) ) {
@@ -157,7 +166,13 @@ class Updater {
 			return false;
 		}
 		$host = strtolower( $parts['host'] );
-		return in_array( $host, array( 'github.com', 'api.github.com', 'codeload.github.com', 'objects.githubusercontent.com' ), true );
+		return in_array( $host, array( 
+			'github.com', 
+			'api.github.com', 
+			'codeload.github.com', 
+			'objects.githubusercontent.com',
+			'github-releases.githubusercontent.com' // FIX: Aggiunto per permettere il download degli asset
+		), true );
 	}
 
 	public function inject_update_info( $transient ) {
