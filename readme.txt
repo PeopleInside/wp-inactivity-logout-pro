@@ -49,6 +49,9 @@ You use this software entirely at your own risk. The authors and contributors ar
 
 == Changelog ==
 
+= 1.1.2 =
+* Self-update improvement
+
 = 1.1.1 =
 * Self-update improvement
 
