@@ -4,7 +4,7 @@ Tags: logout, inactivity, security, session, closed tab, inactivity logout, auto
 Requires at least: 6.0
 Tested up to: 7.1.4
 Requires PHP: 8.0
-Stable tag: 1.0.9
+Stable tag: 1.1.2
 License: MIT License
 License URI: https://github.com/PeopleInside/wp-inactivity-logout-pro/blob/main/LICENSE
 Plugin URI: https://github.com/PeopleInside/wp-inactivity-logout-pro
